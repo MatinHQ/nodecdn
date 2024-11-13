@@ -26,7 +26,6 @@ This server aims to be compatible with the screenshot-basic resource in FiveM, a
 
 ```bash
 git clone https://github.com/MatinHQ/nodecdn.git
-cd secure-file-upload-server
 ```
 
 ### 2. Install dependencies
