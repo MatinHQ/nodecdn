@@ -9,8 +9,29 @@ require('dotenv').config();
 
 const UPLOAD_DIR = path.join(__dirname, 'uploads')
 const SSL_DIR = path.join(__dirname, 'ssl')
-const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE) || Infinity
 const ALLOWED_EXTENSIONS = process.env.ALLOWED_EXTENSIONS ? process.env.ALLOWED_EXTENSIONS.split(',') : []
+
+const fileExtensions = {
+    image: [
+        ".jpeg", ".jpg", ".png", ".gif", ".bmp", ".tiff", ".tif", ".webp", 
+        ".svg", ".heic", ".cr2", ".crw", ".nef", ".nrw", ".arw", ".srf", 
+        ".sr2", ".dng", ".raf", ".orf", ".rw2", ".srw"
+    ],
+    video: [
+        ".mp4", ".mov", ".avi", ".mkv", ".wmv", ".flv", ".webm", ".mpeg", 
+        ".mpg", ".mpe", ".3gp", ".ogv", ".ogg"
+    ],
+    audio: [
+        ".mp3", ".wav", ".aac", ".flac", ".ogg", ".wma", ".m4a", ".alac", 
+        ".aiff", ".pcm", ".opus"
+    ]
+}
+
+// Separate limits based on file type
+const MAX_FILE_SIZE_IMAGE = parseInt(process.env.MAX_FILE_SIZE_IMAGE) || Infinity
+const MAX_FILE_SIZE_AUDIO = parseInt(process.env.MAX_FILE_SIZE_AUDIO) || Infinity
+const MAX_FILE_SIZE_VIDEO = parseInt(process.env.MAX_FILE_SIZE_VIDEO) || Infinity
+const MAX_FILE_SIZE_DEFAULT = parseInt(process.env.MAX_FILE_SIZE_DEFAULT) || Infinity
 
 // Ensure the upload directory exists
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -36,7 +57,7 @@ const storage = multer.diskStorage({
 // File filter for validating extensions
 const fileFilter = (req, file, cb) => {
     if (ALLOWED_EXTENSIONS.length === 0) return cb(null, true) // No validation if empty
-    const ext = path.extname(file.originalname).toLowerCase()
+        const ext = path.extname(file.originalname).toLowerCase()
     if (ALLOWED_EXTENSIONS.includes(ext)) {
         cb(null, true)
     } else {
@@ -44,10 +65,27 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
+// Dynamic file size limit based on file extension
+const getFileSizeLimit = (file) => {
+    const ext = path.extname(file.originalname).toLowerCase()
+    
+    if (fileExtensions.image.includes(ext)) {
+        return MAX_FILE_SIZE_IMAGE
+    } else if (fileExtensions.video.includes(ext)) {
+        return MAX_FILE_SIZE_VIDEO
+    } else if (fileExtensions.audio.includes(ext)) {
+        return MAX_FILE_SIZE_AUDIO
+    } else {
+        return MAX_FILE_SIZE_DEFAULT
+    }
+}
+
 const upload = multer({
     storage,
-    limits: { fileSize: MAX_FILE_SIZE },
     fileFilter,
+    limits: { 
+        fileSize: (req, file, cb) => getFileSizeLimit(file),
+    }
 })
 
 // Middleware to parse JSON data

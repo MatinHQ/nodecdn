@@ -3,7 +3,7 @@
 
 This is a simple Node.js server built with Express and Multer that handles file uploads over HTTPS. It ensures that files are stored securely and supports file extension validation, file size limits, and automatic file expiration. The server also integrates SSL for secure connections and can be easily configured through environment variables.
 
-This server aims to be compatible with the screenshot-basic resource in FiveM, allowing for easy integration with the FiveM framework for automatic image uploads.
+This server aims to be compatible with the screenshot-basic resource in FiveM, allowing for easy integration with the FiveM framework for automatic file uploads.
 
 ## Features
 - **HTTPS support** for secure connections.
@@ -65,7 +65,7 @@ Start the server using the following command:
 node app.js
 ```
 
-The server will be available over HTTPS at `https://localhost:<PORT>`, where `<PORT>` is the port defined in your `.env` file.
+The server will be available over HTTPS at `https://host:<PORT>`, where `<PORT>` is the port defined in your `.env` file.
 
 ### 6. Uploading Files
 
@@ -74,10 +74,10 @@ To upload files, send a `POST` request to the `/upload` endpoint with the file a
 Example using **cURL**:
 
 ```bash
-curl -X POST -F "files[]=@/path/to/your/image.jpg" https://localhost:<PORT>/upload
+curl -X POST -F "files[]=@/path/to/your/filename.ext" https://host:<PORT>/upload
 ```
 
-And for replacing discord webhooks with this simply just replace it with `https://localhost:<PORT>/upload`
+And for replacing discord webhooks with this simply just replace it with `https://host:<PORT>/upload`
 
 If the upload is successful, you will receive a URL pointing to the uploaded file, either as a direct URL or as a Discord-compatible response, depending on the `DISCORD_SCHEMA` setting in your `.env`.
 
@@ -90,7 +90,7 @@ Uploaded files will be automatically deleted after the number of days set in `EX
 You can access uploaded files via their generated URLs. For example:
 
 ```
-https://localhost:<PORT>/uploads/1632549212130-438193-image.jpg
+https://host:<PORT>/uploads/1632549212130-438193-filename.ext
 ```
 
 If you're using the Discord-compatible schema, the response will contain a JSON object with an `attachments` array:
@@ -99,8 +99,8 @@ If you're using the Discord-compatible schema, the response will contain a JSON 
 {
   "attachments": [
     {
-      "url": "https://localhost:3000/uploads/1632549212130-438193-image.jpg",
-      "proxy_url": "https://localhost:3000/uploads/1632549212130-438193-image.jpg"
+      "url": "https://host:3000/uploads/1632549212130-438193-filename.ext",
+      "proxy_url": "https://host:3000/uploads/1632549212130-438193-filename.ext"
     }
   ]
 }
