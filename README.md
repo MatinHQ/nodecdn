@@ -10,7 +10,7 @@ This server aims to be compatible with the screenshot-basic resource in FiveM, a
 - **File upload with Multer**.
 - **Cache serving files** (can be customized via `.env`).
 - **File extension validation** (can be customized via `.env`).
-- **File size limit** (can be customized via `.env`).
+- **Dynamic File size limit based on file extension ** (can be customized via `.env`).
 - **Automatic file expiration** (files are deleted after a specified period).
 - **Dynamic file names** with random numbers to prevent conflicts.
 - **Upload folder creation** if it doesn't exist.
@@ -41,11 +41,15 @@ Rename `.env.sample` file to `.env` in the root of your project and configure th
 
 ```env
 PORT=8080
-CACHE_TIME = 1800 #Time to cache serving files (in seconds)
+CACHE_TIME=1800 #Time to cache serving files (in seconds) 
 EXPIRATION_DAYS=0 #Set it 0 to disable (how long files should presist)
-MAX_FILE_SIZE=5000000          # Max file size in bytes (e.g., 5MB)
-ALLOWED_EXTENSIONS=.png,.jpg,.webp # Allowed extensions seprated by comma
+ALLOWED_EXTENSIONS=.png,.jpg,.jpeg,.gif,.bmp,.webp,.mp4,.mkv,.mov,.avi,.flv,.wmv,.webm,.mpg,.mpeg,.3gp,.m4v,.mp3,.wav,.aac,.flac,.ogg,.wma,.m4a # Allowed extensions seprated by comma
 DISCORD_SCHEMA=true #Whether to return a Discord-compatible JSON response for uploads (Leave it true if you were using discord webhooks to upload)
+
+MAX_FILE_SIZE=1048576          # Default max file size in bytes (e.g., 1MB)
+MAX_FILE_SIZE_IMAGE=3145728     # Image max file size in bytes (e.g., 3MB)
+MAX_FILE_SIZE_VIDEO=20971520     # Video max file size in bytes (e.g., 20MB)
+MAX_FILE_SIZE_AUDIO=3145728      # Audio max file size in bytes (e.g., 3MB)
 ```
 
 ### 4. Place your SSL certificates in the `ssl` folder
