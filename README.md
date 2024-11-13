@@ -10,7 +10,7 @@ This server aims to be compatible with the screenshot-basic resource in FiveM, a
 - **File upload with Multer**.
 - **Cache serving files** (can be customized via `.env`).
 - **File extension validation** (can be customized via `.env`).
-- **Dynamic File size limit based on file extension ** (can be customized via `.env`).
+- **Dynamic File size limit based on file extension** (can be customized via `.env`).
 - **Automatic file expiration** (files are deleted after a specified period).
 - **Dynamic file names** with random numbers to prevent conflicts.
 - **Upload folder creation** if it doesn't exist.
