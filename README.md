@@ -8,6 +8,7 @@ This server aims to be compatible with the screenshot-basic resource in FiveM, a
 ## Features
 - **HTTPS support** for secure connections.
 - **File upload with Multer**.
+- **Cache serving files** (can be customized via `.env`).
 - **File extension validation** (can be customized via `.env`).
 - **File size limit** (can be customized via `.env`).
 - **Automatic file expiration** (files are deleted after a specified period).
@@ -40,6 +41,7 @@ Rename `.env.sample` file to `.env` in the root of your project and configure th
 
 ```env
 PORT=8080
+CACHE_TIME = 1800 #Time to cache serving files (in seconds)
 EXPIRATION_DAYS=0 #Set it 0 to disable (how long files should presist)
 MAX_FILE_SIZE=5000000          # Max file size in bytes (e.g., 5MB)
 ALLOWED_EXTENSIONS=.png,.jpg,.webp # Allowed extensions seprated by comma

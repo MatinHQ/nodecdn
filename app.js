@@ -20,7 +20,6 @@ if (!fs.existsSync(UPLOAD_DIR)) {
 // Ensure the SSL folder exists, create if not
 if (!fs.existsSync(SSL_DIR)) {
     fs.mkdirSync(SSL_DIR, { recursive: true })
-    console.log('SSL folder created')
 }
 
 
@@ -76,13 +75,13 @@ app.post('/upload', (req, res) => {
 })
 
 // Serve uploaded files statically
-app.use('/uploads', express.static(UPLOAD_DIR))
+app.use('/uploads', express.static(UPLOAD_DIR, {maxAge: (parseInt(process.env.CACHE_TIME) ?? 0) * 1000}))
 
 // Schedule the cleanup job to run every day at midnight
 if (process.env.EXPIRATION_DAYS > 0) {
     cron.schedule('0 0 * * *', function() {
         const now = Date.now()
-        const expirationTime = parseInt(process.env.EXPIRATION_DAYS) * 24 * 60 * 60 * 1000 // Expiration in milliseconds
+        const expirationTime = parseInt(process.env.EXPIRATION_DAYS) * 86_400_000  // Expiration in milliseconds
     
         fs.readdir(UPLOAD_DIR, (err, files) => {
             if (err) {
