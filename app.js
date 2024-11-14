@@ -3,7 +3,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
-const http = require('http');
 const cron = require('node-cron');
 const app = express();
 require('dotenv').config();

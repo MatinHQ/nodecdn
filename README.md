@@ -105,8 +105,8 @@ If you're using the Discord-compatible schema, the response will contain a JSON 
 {
   "attachments": [
     {
-      "url": "https://<DOMAIN>:3000/uploads/1632549212130-438193-filename.ext",
-      "proxy_url": "https://<DOMAIN>:3000/uploads/1632549212130-438193-filename.ext"
+      "url": "https://<DOMAIN>:<PORT>/uploads/1632549212130-438193-filename.ext",
+      "proxy_url": "https://<DOMAIN>:<PORT>/uploads/1632549212130-438193-filename.ext"
     }
   ]
 }
