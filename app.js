@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
+const http = require('http');
 const cron = require('node-cron');
 const app = express();
 require('dotenv').config();
@@ -10,6 +11,8 @@ require('dotenv').config();
 const UPLOAD_DIR = path.join(__dirname, 'uploads')
 const SSL_DIR = path.join(__dirname, 'ssl')
 const ALLOWED_EXTENSIONS = process.env.ALLOWED_EXTENSIONS ? process.env.ALLOWED_EXTENSIONS.split(',') : []
+const MAIN_DOMAIN = process.env.DOMAIN
+if (MAIN_DOMAIN === 'test.com') return console.log('Please change default domain name')
 
 const fileExtensions = {
     image: [
@@ -91,6 +94,15 @@ const upload = multer({
 // Middleware to parse JSON data
 app.use(express.json())
 
+// If the requst is not with main domain redirect it
+app.use((req, res, next) => {
+    if (req.hostname !== MAIN_DOMAIN) {
+        const redirectUrl = `https://${MAIN_DOMAIN}:${process.env.PORT}${req.url}`
+        return res.redirect(301, redirectUrl)
+    }
+    next()
+})
+
 // Upload route
 app.post('/upload', (req, res) => {
     upload.single('files[]')(req, res, err => {
@@ -153,5 +165,7 @@ const sslOptions = {
 
 // Create HTTPS server and listen for requests only on the specified domain
 https.createServer(sslOptions, app).listen(process.env.PORT, () => {
-    console.log(`Server is running securely at port ${process.env.PORT}`)
+    console.log(`Server is running securely at https://${MAIN_DOMAIN}:${process.env.PORT}`)
+    console.log(`Use https://${MAIN_DOMAIN}:${process.env.PORT}/upload for uploading files`)
+    console.log(`Use https://${MAIN_DOMAIN}:${process.env.PORT}/uploads/filename for serving files`)
 })
