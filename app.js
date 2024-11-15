@@ -51,7 +51,7 @@ const storage = multer.diskStorage({
     destination: UPLOAD_DIR,
     filename: (req, file, cb) => {
         let fileName = file.originalname.replace(/[<>:"/\\|?*\x00-\x1F]/g, '_')
-        fileName = fileName.length > 50 ? fileName.substring(0, MAX_FILENAME_LENGTH) : fileName
+        fileName = fileName.length > process.env.MAX_FILENAME_LENGTH ? fileName.substring(0, process.env.MAX_FILENAME_LENGTH) : fileName
 
         const randomNumber = Math.floor(Math.random() * 10000)
         const uniqueName = `${Date.now()}-${randomNumber}-${file.originalname}`
